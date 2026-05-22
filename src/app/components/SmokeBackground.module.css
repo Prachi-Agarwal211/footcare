@@ -1,0 +1,12 @@
+.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  pointer-events: none;
+  background-color: #05080f;
+  transform: translate3d(0, 0, 0); /* Force GPU composite layer */
+  will-change: transform;
+}

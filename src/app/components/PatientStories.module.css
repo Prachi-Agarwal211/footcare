@@ -1,0 +1,414 @@
+.section {
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+  padding: var(--section-pad-y) 0;
+}
+
+.bgAccent {
+  position: absolute;
+  top: 50%;
+  right: -150px;
+  transform: translateY(-50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 48px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Head ─── */
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  margin-bottom: 64px;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.titleGreen {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.desc {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--text-muted);
+  max-width: 620px;
+  line-height: 1.7;
+}
+
+/* ─── Carousel Layout ─── */
+.carouselContainer {
+  width: 100%;
+  overflow: visible; /* Allows scale and multi-layered shadows to overflow without clipping */
+  position: relative;
+  margin-bottom: 40px;
+  touch-action: pan-y;
+}
+
+.carouselTrack {
+  display: flex;
+  gap: 32px;
+  cursor: grab;
+  width: max-content;
+  will-change: transform;
+}
+
+.carouselTrack:active {
+  cursor: grabbing;
+}
+
+.cardWrapper {
+  flex-shrink: 0;
+  perspective: 1200px;
+}
+
+.card {
+  position: relative;
+  background: #ffffff; /* Crisp white card background */
+  border: 1px solid rgba(14, 165, 233, 0.18);
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transform-style: preserve-3d;
+  transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(var(--tz, 0px));
+  transition: border-color var(--transition-mid), box-shadow var(--transition-mid);
+  
+  /* Multi-layered premium natural shadow */
+  box-shadow: 
+    0 4px 6px -1px rgba(5, 8, 15, 0.02),
+    0 10px 15px -3px rgba(5, 8, 15, 0.03),
+    0 20px 25px -5px rgba(5, 8, 15, 0.04),
+    0 30px 40px -10px rgba(5, 8, 15, 0.05);
+}
+
+/* Cursor-following spotlight reflections */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: radial-gradient(
+    400px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(34, 197, 94, 0.08) 0%,
+    rgba(14, 165, 233, 0.03) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.cardActive {
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.cardInner {
+  transform: translateZ(20px);
+  transform-style: preserve-3d;
+}
+
+.card:hover {
+  border-color: var(--accent-dark);
+  box-shadow: 
+    0 6px 10px -2px rgba(34, 197, 94, 0.04),
+    0 12px 20px -4px rgba(14, 165, 233, 0.03),
+    0 24px 36px -8px rgba(34, 197, 94, 0.1),
+    0 40px 56px -12px rgba(14, 165, 233, 0.08);
+}
+
+.cardExpanded {
+  border-color: var(--primary-dark) !important;
+  box-shadow: 
+    0 8px 12px -3px rgba(14, 165, 233, 0.06),
+    0 20px 30px -6px rgba(14, 165, 233, 0.08),
+    0 40px 60px -12px rgba(14, 165, 233, 0.12) !important;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardLabel {
+  font-family: var(--font-tech);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.18);
+  padding: 3px 12px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cardTag {
+  font-family: var(--font-tech);
+  font-size: 0.6rem;
+  color: #64748b; /* Muted slate */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.starRow {
+  display: flex;
+  gap: 3px;
+}
+
+.star {
+  color: var(--accent-dark);
+  font-size: 0.95rem;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a; /* Dark slate */
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.cardPatient {
+  font-size: 0.85rem;
+  color: #475569; /* Slate */
+}
+
+.cardPatient strong {
+  color: #0f172a; /* Dark slate */
+}
+
+.cardCondition {
+  font-size: 0.88rem;
+  color: #334155; /* Dark text */
+  line-height: 1.55;
+  background: rgba(14, 165, 233, 0.04);
+  border-left: 3px solid var(--primary-dark);
+  padding: 10px 14px;
+  border-radius: 0 12px 12px 0;
+}
+
+/* Expandable section */
+.expandContent {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height var(--transition-slow), opacity var(--transition-slow);
+}
+
+.expandOpen {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.expandSection {
+  padding: 16px 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.expandLabel {
+  font-family: var(--font-tech);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.expandText {
+  font-size: 0.88rem;
+  color: #334155; /* Dark readable text */
+  line-height: 1.65;
+}
+
+.clinicalList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.clinicalList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.clinicalDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primary-dark);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.storyQuote {
+  background: rgba(34, 197, 94, 0.04);
+  border-left: 3px solid var(--accent-dark);
+  padding: 14px 18px;
+  border-radius: 0 12px 12px 0;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-top: auto;
+  transition: color var(--transition-fast);
+}
+
+.readMore:hover {
+  color: var(--accent-dark);
+}
+
+/* Carousel Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 8px;
+  margin-bottom: 48px;
+}
+
+.arrowBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(14, 165, 233, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-dark);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 2px 4px rgba(5, 8, 15, 0.03),
+    0 6px 12px rgba(5, 8, 15, 0.05);
+}
+
+.arrowBtn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  transform: scale(1.08);
+  box-shadow: var(--glow-blue);
+}
+
+.arrowBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.dots {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dotActive {
+  background: var(--accent-dark);
+  width: 26px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+/* ─── Foot Note ─── */
+.footNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #ffffff; /* White footnote background */
+  border: 1px solid rgba(34, 197, 94, 0.18);
+  border-radius: 16px;
+  padding: 20px 32px;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #475569;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.05);
+  max-width: fit-content;
+  margin: 0 auto;
+}
+
+.footNote span {
+  font-size: 1.3rem;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .wrap {
+    padding: 0 20px;
+  }
+  .footNote {
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 20px;
+  }
+  .carouselTrack {
+    gap: 16px;
+  }
+}
