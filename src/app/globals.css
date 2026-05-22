@@ -1,63 +1,113 @@
 /*
-  CHANGELOG - globals.css
-  - Swapped to dark-first theme (near-black, deep blue-black card surfaces)
-  - Colors strictly limited to green, blue, white, and black gradients
-  - Upgraded glow-btn and secondary-btn to Awwwards style with custom overlays
-  - Standardized scrollbar, selection, and glass panel styles
+  GLOBALS v4 — Fixed & Complete
+  Architecture: Alternating dark/light sections with smoke WebGL
+  - Dark sections: transparent BG, glassmorphic dark cards, light text
+  - Light sections: soft gradient BG, elevated white cards, dark text
+  - SVG wave dividers bridge section boundaries
+  - Navbar: transparent on Hero, dark glass when scrolled (readable everywhere)
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap');
-
 :root {
-  /* ─── Color Palette: Black, Green, Blue, White ─── */
-  --bg-dark:         #05080f; /* Base near-black */
-  --bg-surface:      #0a1220; /* Dark card surface */
-  --bg-surface-hover:#0f1a2e; /* Highlight card surface */
-  --bg-glass:        rgba(10, 18, 32, 0.7); /* Glass surface */
-  --bg-glass-hover:  rgba(15, 26, 46, 0.85);
-
-  /* Primary Blue */
-  --primary:         #0ea5e9;
+  /* ════════════════════════════════════════════════════════
+     BRAND PALETTE
+  ════════════════════════════════════════════════════════ */
+  --primary:         #0ea5e9;   /* Sky Blue   */
   --primary-dark:    #0284c7;
   --primary-rgb:     14, 165, 233;
 
-  /* Accent Green */
-  --accent:          #22c55e;
+  --accent:          #22c55e;   /* Emerald    */
   --accent-dark:     #16a34a;
   --accent-rgb:      34, 197, 94;
 
-  /* Text colors (Dark first) */
+  /* ════════════════════════════════════════════════════════
+     DARK SURFACE STACK  (Smoke / transparent sections)
+  ════════════════════════════════════════════════════════ */
+  --surf-base:       #05080f;
+
+  /* Glass panels for dark sections */
+  --glass-bg:        rgba(8, 15, 32, 0.72);
+  --glass-bg-hover:  rgba(12, 22, 44, 0.88);
+  --glass-border:    rgba(255, 255, 255, 0.07);
+  --glass-border-blue: rgba(14, 165, 233, 0.22);
+  --glass-border-green: rgba(34, 197, 94, 0.22);
+
+  /* ════════════════════════════════════════════════════════
+     LIGHT SURFACE STACK  (Light sections)
+  ════════════════════════════════════════════════════════ */
+  --light-base:      #f0f8ff;
+  --light-card:      #ffffff;
+  --light-border:    rgba(15, 23, 42, 0.08);
+  --light-border-blue: rgba(14, 165, 233, 0.15);
+  --light-border-green: rgba(34, 197, 94, 0.15);
+
+  /* ════════════════════════════════════════════════════════
+     TEXT — context aware
+  ════════════════════════════════════════════════════════ */
+  /* For DARK backgrounds */
   --text-primary:    #f0f9ff;
   --text-muted:      #94a3b8;
   --text-dim:        #64748b;
-  --text-inverse:    #05080f;
 
-  /* Borders */
+  /* For LIGHT backgrounds */
+  --text-dark:       #0f172a;
+  --text-mid:        #1e293b;
+  --text-slate:      #334155;
+  --text-subtle:     #64748b;
+
+  /* ════════════════════════════════════════════════════════
+     HERO COMPONENT VARS
+  ════════════════════════════════════════════════════════ */
   --border-subtle:   rgba(255, 255, 255, 0.06);
-  --border-blue:     rgba(14, 165, 233, 0.15);
-  --border-green:    rgba(34, 197, 94, 0.15);
+  --border-blue:     rgba(14, 165, 233, 0.18);
+  --border-green:    rgba(34, 197, 94, 0.18);
 
-  /* Glow Shadows */
-  --glow-blue:       0 0 0 1px rgba(14, 165, 233, 0.15), 0 4px 24px rgba(14, 165, 233, 0.08), 0 1px 2px rgba(0, 0, 0, 0.5);
-  --glow-blue-hover: 0 0 0 1px rgba(14, 165, 233, 0.3), 0 8px 40px rgba(14, 165, 233, 0.18);
-  --glow-green:      0 0 0 1px rgba(34, 197, 94, 0.15), 0 4px 24px rgba(34, 197, 94, 0.08), 0 1px 2px rgba(0, 0, 0, 0.5);
-  --glow-green-hover:0 0 0 1px rgba(34, 197, 94, 0.3), 0 8px 40px rgba(34, 197, 94, 0.18);
+  /* ════════════════════════════════════════════════════════
+     GLOW SHADOWS
+  ════════════════════════════════════════════════════════ */
+  /* Dark section cards */
+  --glow-blue:
+    0 0 0 1px rgba(14, 165, 233, 0.18),
+    0 4px 24px rgba(14, 165, 233, 0.10),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  --glow-blue-hover:
+    0 0 0 1px rgba(14, 165, 233, 0.35),
+    0 8px 40px rgba(14, 165, 233, 0.22),
+    0 0 80px rgba(14, 165, 233, 0.08);
+  --glow-green:
+    0 0 0 1px rgba(34, 197, 94, 0.18),
+    0 4px 24px rgba(34, 197, 94, 0.10),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  --glow-green-hover:
+    0 0 0 1px rgba(34, 197, 94, 0.35),
+    0 8px 40px rgba(34, 197, 94, 0.22),
+    0 0 80px rgba(34, 197, 94, 0.08);
 
-  /* Fonts */
-  --font-display:    'Outfit', sans-serif;
-  --font-body:       'Plus Jakarta Sans', sans-serif;
-  --font-tech:       'Sora', sans-serif;
+  /* Light section cards */
+  --shadow-card:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 8px rgba(15, 23, 42, 0.04),
+    0 12px 24px rgba(15, 23, 42, 0.06);
+  --shadow-card-hover:
+    0 4px 8px rgba(14, 165, 233, 0.06),
+    0 12px 24px rgba(14, 165, 233, 0.08),
+    0 24px 48px rgba(34, 197, 94, 0.10);
+  --shadow-card-green:
+    0 4px 8px rgba(34, 197, 94, 0.06),
+    0 12px 24px rgba(34, 197, 94, 0.08),
+    0 24px 48px rgba(14, 165, 233, 0.06);
 
-  /* Layout */
+  /* ════════════════════════════════════════════════════════
+     LAYOUT & TYPOGRAPHY
+  ════════════════════════════════════════════════════════ */
   --nav-height:      80px;
   --max-width:       1200px;
-  --section-pad-y:   clamp(6rem, 10vw, 8rem); /* Fluid section spacing */
+  --section-pad-y:   clamp(5rem, 8vw, 7rem);
+  --section-pad-x:   clamp(20px, 4vw, 48px);
 
-  /* Motion */
-  --ease-out:        cubic-bezier(0.16, 1, 0.3, 1); /* Expo out */
-  --transition-fast: 0.12s var(--ease-out);
-  --transition-mid:  0.28s var(--ease-out);
-  --transition-slow: 0.55s var(--ease-out);
+  --ease-expo:       cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-mid:  0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── Reset ─── */
@@ -71,96 +121,193 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--nav-height);
   overflow-x: hidden;
-  background-color: var(--bg-dark);
+  background-color: var(--surf-base);
 }
 
 body {
   width: 100%;
-  max-width: 100%;
   overflow-x: hidden;
-  background-color: var(--bg-dark);
+  background-color: var(--surf-base);
   color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: clamp(0.9rem, 1.5vw, 1rem);
-  line-height: 1.7;
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  color: var(--text-primary);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-weight: 700;
   letter-spacing: -0.025em;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
-p {
-  color: var(--text-muted);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: var(--transition-fast);
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+p { line-height: 1.7; }
+a { color: inherit; text-decoration: none; transition: color 0.15s; }
+img { max-width: 100%; height: auto; display: block; }
+button { font-family: inherit; }
 
 /* ─── Scrollbar ─── */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-dark);
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surf-base); }
 ::-webkit-scrollbar-thumb {
-  background: rgba(14, 165, 233, 0.3);
-  border-radius: 4px;
-  border: 2px solid var(--bg-dark);
+  background: rgba(14, 165, 233, 0.35);
+  border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(34, 197, 94, 0.5);
-}
+::-webkit-scrollbar-thumb:hover { background: rgba(34, 197, 94, 0.55); }
 
 /* Selection */
-::selection {
-  background: rgba(34, 197, 94, 0.2);
-  color: var(--accent);
+::selection { background: rgba(34, 197, 94, 0.2); color: var(--accent); }
+
+/* ─── Accessibility ─── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-/* ─── Global Utility: Glass Panel ─── */
-.glass-panel {
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  border: 1px solid var(--border-subtle);
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 10px 20px;
+  background: var(--accent-dark);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 0 0 8px 8px;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 0; }
+
+/* ════════════════════════════════════════════════════════
+   SECTION BACKGROUNDS — Two-track system
+════════════════════════════════════════════════════════ */
+
+/* Dark sections: transparent BG, smoke bleeds through */
+/* No isolation, no pseudo-elements — keep it simple */
+.section-dark {
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* Light sections: solid gradient BG */
+.section-light {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-light-blue {
+  background: linear-gradient(160deg, #eef7ff 0%, #f0fdf4 60%, #eef7ff 100%);
+}
+
+.section-light-green {
+  background: linear-gradient(160deg, #f0fdf4 0%, #eef7ff 60%, #f0fdf4 100%);
+}
+
+/* ════════════════════════════════════════════════════════
+   WAVE DIVIDERS — section transitions
+════════════════════════════════════════════════════════ */
+.wave-divider {
+  display: block;
+  line-height: 0;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.wave-divider svg {
+  display: block;
+  width: 100%;
+  height: clamp(40px, 5vw, 70px);
+  shape-rendering: geometricPrecision;
+}
+
+/* ════════════════════════════════════════════════════════
+   CARD UTILITIES — context-specific
+════════════════════════════════════════════════════════ */
+
+/* Dark-section glass card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
   box-shadow: var(--glow-blue);
-  border-radius: 16px;
+  border-radius: 20px;
   transition: var(--transition-mid);
 }
-
-.glass-panel:hover {
-  border-color: var(--border-blue);
+.glass-card:hover {
+  border-color: var(--glass-border-blue);
   box-shadow: var(--glow-blue-hover);
+  background: var(--glass-bg-hover);
+}
+.glass-card-green:hover {
+  border-color: var(--glass-border-green);
+  box-shadow: var(--glow-green-hover);
 }
 
-/* ─── Global CTA Buttons ─── */
+/* Light-section elevated card */
+.light-card {
+  background: var(--light-card);
+  border: 1px solid var(--light-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition-mid), box-shadow var(--transition-mid), transform var(--transition-mid);
+}
+.light-card:hover {
+  border-color: var(--light-border-blue);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-4px);
+}
+
+/* Section wrapper */
+.section-wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--section-pad-x);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Section Badge/Tag — two variants ── */
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-tech, 'Sora', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 5px 14px;
+  border-radius: 50px;
+  margin-bottom: 16px;
+  /* Default: dark section (bright tag) */
+  color: var(--accent);
+  background: rgba(34, 197, 94, 0.10);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+/* Use this class for tags in light sections */
+.section-tag-light {
+  color: var(--accent-dark);
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  box-shadow: none;
+}
+
+/* ─── CTA Buttons ─── */
 .glow-btn {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 32px;
-  font-family: var(--font-display);
+  padding: 13px 30px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
   font-weight: 700;
   font-size: 0.95rem;
-  letter-spacing: 0.02em;
   color: #ffffff;
   background: linear-gradient(135deg, var(--accent-dark) 0%, var(--primary-dark) 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -168,11 +315,11 @@ img {
   cursor: pointer;
   overflow: hidden;
   z-index: 1;
-  transition: var(--transition-mid);
-  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.25);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), box-shadow 0.28s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.35);
   text-decoration: none;
+  white-space: nowrap;
 }
-
 .glow-btn::before {
   content: '';
   position: absolute;
@@ -180,21 +327,19 @@ img {
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   opacity: 0;
   z-index: -1;
-  transition: var(--transition-mid);
+  transition: opacity 0.28s ease;
 }
-
 .glow-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(14, 165, 233, 0.35);
-  color: #ffffff;
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.45);
 }
-
-.glow-btn:hover::before {
-  opacity: 1;
-}
-
-.glow-btn:active {
-  transform: translateY(0);
+.glow-btn:hover::before { opacity: 1; }
+.glow-btn:active { transform: translateY(0); }
+.glow-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .secondary-btn {
@@ -202,62 +347,83 @@ img {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 32px;
-  font-family: var(--font-display);
+  padding: 13px 30px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50px;
   cursor: pointer;
-  transition: var(--transition-mid);
+  transition: all 0.28s ease;
   text-decoration: none;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
-
 .secondary-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(14, 165, 233, 0.12);
   border-color: var(--primary);
   color: var(--primary);
   transform: translateY(-2px);
-  box-shadow: var(--glow-blue);
 }
 
-.secondary-btn:active {
-  transform: translateY(0);
-}
-
-/* ─── Gradient text utility ─── */
+/* ─── Gradient text ─── */
 .glow-text {
   background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
-/* ─── Section helpers ─── */
-.section-tag {
-  display: inline-block;
-  font-family: var(--font-tech);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  background: rgba(34, 197, 94, 0.08);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  padding: 6px 16px;
-  border-radius: 50px;
-  margin-bottom: 20px;
+.glow-text-dark {
+  background: linear-gradient(135deg, var(--accent-dark) 0%, var(--primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Respect prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* ─── Scroll Progress Bar ─── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-dark), var(--primary));
+  z-index: 9999;
+  transform-origin: left;
+  transform: scaleX(0);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* ─── WhatsApp Float ─── */
+.wa-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 900;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  text-decoration: none;
+  animation: waFloat 3s ease-in-out infinite;
+}
+.wa-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 32px rgba(37, 211, 102, 0.6);
+}
+@keyframes waFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .wa-float { bottom: 20px; right: 20px; width: 52px; height: 52px; }
 }

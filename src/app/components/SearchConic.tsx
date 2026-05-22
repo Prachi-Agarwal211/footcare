@@ -75,37 +75,62 @@ export default function SearchConic() {
     setActiveIndex(-1);
     setFocused(false);
 
-    // Fill the contact form notes and focus the name field
-    const notesField = document.getElementById("c-notes") as HTMLTextAreaElement | null;
-    const serviceField = document.getElementById("c-service") as HTMLSelectElement | null;
-    const nameField = document.getElementById("c-name") as HTMLInputElement | null;
-
-    if (notesField) {
-      notesField.value = `I am inquiring about treatment and solutions for: ${condition}.`;
+    // Compute appropriate service category
+    let computedService = "Prosthetics — Above Knee / Below Knee / Upper Limb";
+    if (
+      condition.toLowerCase().includes("prosthes") ||
+      condition.toLowerCase().includes("limb") ||
+      condition.toLowerCase().includes("bionic") ||
+      condition.toLowerCase().includes("foot")
+    ) {
+      computedService = "Prosthetics — Above Knee / Below Knee / Upper Limb";
+    } else if (
+      condition.toLowerCase().includes("orthotic") ||
+      condition.toLowerCase().includes("brace") ||
+      condition.toLowerCase().includes("scar")
+    ) {
+      computedService = "Custom Orthotics & Bracing";
+    } else if (
+      condition.toLowerCase().includes("compression") ||
+      condition.toLowerCase().includes("lymphedema") ||
+      condition.toLowerCase().includes("vein") ||
+      condition.toLowerCase().includes("dvt")
+    ) {
+      computedService = "Compression Therapy / Lymphedema";
+    } else if (
+      condition.toLowerCase().includes("pain") ||
+      condition.toLowerCase().includes("flat") ||
+      condition.toLowerCase().includes("heel")
+    ) {
+      computedService = "Foot Pain — Flat Foot, Diabetic Foot, Heel Pain";
+    } else if (
+      condition.toLowerCase().includes("scan") ||
+      condition.toLowerCase().includes("gait")
+    ) {
+      computedService = "Podiascan / Gait Analysis";
+    } else if (
+      condition.toLowerCase().includes("rehab") ||
+      condition.toLowerCase().includes("polio") ||
+      condition.toLowerCase().includes("paralysis")
+    ) {
+      computedService = "Rehabilitation & Post-surgery Recovery";
     }
 
-    if (serviceField) {
-      // Find the most appropriate service value
-      if (condition.toLowerCase().includes("prosthes") || condition.toLowerCase().includes("limb") || condition.toLowerCase().includes("bionic") || condition.toLowerCase().includes("foot")) {
-        serviceField.value = "Prosthetics — Above Knee / Below Knee / Upper Limb";
-      } else if (condition.toLowerCase().includes("orthotic") || condition.toLowerCase().includes("brace") || condition.toLowerCase().includes("scar")) {
-        serviceField.value = "Custom Orthotics & Bracing";
-      } else if (condition.toLowerCase().includes("compression") || condition.toLowerCase().includes("lymphedema") || condition.toLowerCase().includes("vein") || condition.toLowerCase().includes("dvt")) {
-        serviceField.value = "Compression Therapy / Lymphedema";
-      } else if (condition.toLowerCase().includes("pain") || condition.toLowerCase().includes("flat") || condition.toLowerCase().includes("heel")) {
-        serviceField.value = "Foot Pain — Flat Foot, Diabetic Foot, Heel Pain";
-      } else if (condition.toLowerCase().includes("scan") || condition.toLowerCase().includes("gait")) {
-        serviceField.value = "Podiascan / Gait Analysis";
-      } else if (condition.toLowerCase().includes("rehab") || condition.toLowerCase().includes("polio") || condition.toLowerCase().includes("paralysis")) {
-        serviceField.value = "Rehabilitation & Post-surgery Recovery";
-      }
-    }
+    // Dispatch custom event for Contact component to listen to
+    const event = new CustomEvent("autofillContact", {
+      detail: {
+        notes: `I am inquiring about treatment and solutions for: ${condition}.`,
+        service: computedService,
+      },
+    });
+    window.dispatchEvent(event);
 
     // Scroll to contact form smoothly
     const contactSection = document.getElementById("contact");
     if (contactSection) {
       contactSection.scrollIntoView({ behavior: "smooth" });
       setTimeout(() => {
+        const nameField = document.getElementById("c-name") as HTMLInputElement | null;
         if (nameField) nameField.focus();
       }, 800);
     }

@@ -202,7 +202,7 @@ export default function Technology() {
 
       <div className={styles.wrap}>
         <div className={styles.head} ref={headRef}>
-          <span className="section-tag">Advanced Technology</span>
+          <span className="section-tag section-tag-light">Advanced Technology</span>
           <h2 className={styles.title}>
             Advanced Technologies in<br />
             <span className={styles.titleGreen}>Prosthetics &amp; Orthotics</span>

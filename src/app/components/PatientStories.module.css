@@ -1,8 +1,9 @@
+/* PatientStories — Dark Section (glassmorphic carousel cards) */
 .section {
   position: relative;
-  background: transparent;
   overflow: hidden;
   padding: var(--section-pad-y) 0;
+  z-index: 1;
 }
 
 .bgAccent {
@@ -10,10 +11,22 @@
   top: 50%;
   right: -150px;
   transform: translateY(-50%);
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(34, 197, 94, 0.04) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.05) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bgAccentLeft {
+  position: absolute;
+  top: 20%;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.04) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
 }
@@ -21,7 +34,7 @@
 .wrap {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 48px;
+  padding: 0 var(--section-pad-x);
   position: relative;
   z-index: 1;
 }
@@ -59,10 +72,10 @@
   line-height: 1.7;
 }
 
-/* ─── Carousel Layout ─── */
+/* ─── Carousel ─── */
 .carouselContainer {
   width: 100%;
-  overflow: visible; /* Allows scale and multi-layered shadows to overflow without clipping */
+  overflow: visible;
   position: relative;
   margin-bottom: 40px;
   touch-action: pan-y;
@@ -85,10 +98,13 @@
   perspective: 1200px;
 }
 
+/* ─── Glassmorphic story card ─── */
 .card {
   position: relative;
-  background: #ffffff; /* Crisp white card background */
-  border: 1px solid rgba(14, 165, 233, 0.18);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
   padding: 32px;
   display: flex;
@@ -96,32 +112,29 @@
   gap: 16px;
   transform-style: preserve-3d;
   transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(var(--tz, 0px));
-  transition: border-color var(--transition-mid), box-shadow var(--transition-mid);
-  
-  /* Multi-layered premium natural shadow */
-  box-shadow: 
-    0 4px 6px -1px rgba(5, 8, 15, 0.02),
-    0 10px 15px -3px rgba(5, 8, 15, 0.03),
-    0 20px 25px -5px rgba(5, 8, 15, 0.04),
-    0 30px 40px -10px rgba(5, 8, 15, 0.05);
+  transition: border-color var(--transition-mid), box-shadow var(--transition-mid), background var(--transition-mid);
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.35),
+    0 12px 24px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
-/* Cursor-following spotlight reflections */
+/* Cursor spotlight */
 .card::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 24px;
   background: radial-gradient(
-    400px circle at var(--mx, 50%) var(--my, 50%),
+    380px circle at var(--mx, 50%) var(--my, 50%),
     rgba(34, 197, 94, 0.08) 0%,
-    rgba(14, 165, 233, 0.03) 40%,
+    rgba(14, 165, 233, 0.04) 40%,
     transparent 70%
   );
   pointer-events: none;
   z-index: 3;
   opacity: 0;
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s ease;
 }
 
 .card:hover::after {
@@ -129,29 +142,30 @@
 }
 
 .cardActive {
-  border-color: rgba(34, 197, 94, 0.35);
+  border-color: rgba(34, 197, 94, 0.28) !important;
+  box-shadow:
+    0 8px 16px rgba(0,0,0,0.3),
+    0 0 0 1px rgba(34,197,94,0.2),
+    0 0 40px rgba(34,197,94,0.06) !important;
 }
 
 .cardInner {
-  transform: translateZ(20px);
+  transform: translateZ(18px);
   transform-style: preserve-3d;
 }
 
 .card:hover {
-  border-color: var(--accent-dark);
-  box-shadow: 
-    0 6px 10px -2px rgba(34, 197, 94, 0.04),
-    0 12px 20px -4px rgba(14, 165, 233, 0.03),
-    0 24px 36px -8px rgba(34, 197, 94, 0.1),
-    0 40px 56px -12px rgba(14, 165, 233, 0.08);
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-green);
+  box-shadow: var(--glow-green-hover);
 }
 
 .cardExpanded {
-  border-color: var(--primary-dark) !important;
-  box-shadow: 
-    0 8px 12px -3px rgba(14, 165, 233, 0.06),
-    0 20px 30px -6px rgba(14, 165, 233, 0.08),
-    0 40px 60px -12px rgba(14, 165, 233, 0.12) !important;
+  border-color: var(--primary) !important;
+  box-shadow:
+    0 0 0 1px rgba(14,165,233,0.25),
+    0 12px 40px rgba(14,165,233,0.15),
+    0 40px 80px rgba(14,165,233,0.08) !important;
 }
 
 .cardTop {
@@ -164,22 +178,27 @@
   font-family: var(--font-tech);
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--accent-dark);
-  background: rgba(34, 197, 94, 0.08);
-  border: 1px solid rgba(34, 197, 94, 0.18);
+  color: var(--accent);
+  background: rgba(34, 197, 94, 0.10);
+  border: 1px solid rgba(34, 197, 94, 0.22);
   padding: 3px 12px;
   border-radius: 50px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  box-shadow: 0 0 10px rgba(34,197,94,0.08);
 }
 
 .cardTag {
   font-family: var(--font-tech);
   font-size: 0.6rem;
-  color: #64748b; /* Muted slate */
+  color: var(--text-dim);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 2px 8px;
+  border-radius: 50px;
 }
 
 .starRow {
@@ -188,33 +207,34 @@
 }
 
 .star {
-  color: var(--accent-dark);
+  color: #fbbf24;
   font-size: 0.95rem;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
 }
 
 .cardTitle {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #0f172a; /* Dark slate */
+  color: var(--text-primary);
   line-height: 1.35;
   letter-spacing: -0.02em;
 }
 
 .cardPatient {
   font-size: 0.85rem;
-  color: #475569; /* Slate */
+  color: var(--text-muted);
 }
 
 .cardPatient strong {
-  color: #0f172a; /* Dark slate */
+  color: var(--text-primary);
 }
 
 .cardCondition {
   font-size: 0.88rem;
-  color: #334155; /* Dark text */
+  color: var(--text-muted);
   line-height: 1.55;
-  background: rgba(14, 165, 233, 0.04);
-  border-left: 3px solid var(--primary-dark);
+  background: rgba(14, 165, 233, 0.07);
+  border-left: 3px solid var(--primary);
   padding: 10px 14px;
   border-radius: 0 12px 12px 0;
 }
@@ -234,14 +254,14 @@
 
 .expandSection {
   padding: 16px 0;
-  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .expandLabel {
   font-family: var(--font-tech);
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--accent-dark);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 8px;
@@ -249,7 +269,7 @@
 
 .expandText {
   font-size: 0.88rem;
-  color: #334155; /* Dark readable text */
+  color: var(--text-muted);
   line-height: 1.65;
 }
 
@@ -265,7 +285,7 @@
   align-items: flex-start;
   gap: 8px;
   font-size: 0.85rem;
-  color: #334155;
+  color: var(--text-muted);
   line-height: 1.5;
 }
 
@@ -273,19 +293,20 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--primary-dark);
+  background: var(--primary);
+  box-shadow: 0 0 5px rgba(14,165,233,0.5);
   flex-shrink: 0;
   margin-top: 8px;
 }
 
 .storyQuote {
-  background: rgba(34, 197, 94, 0.04);
+  background: rgba(34, 197, 94, 0.06);
   border-left: 3px solid var(--accent-dark);
   padding: 14px 18px;
   border-radius: 0 12px 12px 0;
   font-size: 0.88rem;
   font-style: italic;
-  color: #334155;
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -296,7 +317,7 @@
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--primary-dark);
+  color: var(--primary);
   background: none;
   border: none;
   cursor: pointer;
@@ -306,7 +327,7 @@
 }
 
 .readMore:hover {
-  color: var(--accent-dark);
+  color: var(--accent);
 }
 
 /* Carousel Controls */
@@ -320,32 +341,32 @@
 }
 
 .arrowBtn {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: #ffffff;
-  border: 1px solid rgba(14, 165, 233, 0.18);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-dark);
+  color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 
-    0 2px 4px rgba(5, 8, 15, 0.03),
-    0 6px 12px rgba(5, 8, 15, 0.05);
+  transition: all 0.3s var(--ease-expo);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
 .arrowBtn:hover:not(:disabled) {
-  background: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
-  transform: scale(1.08);
+  background: rgba(14, 165, 233, 0.15);
+  color: var(--primary);
+  border-color: var(--glass-border-blue);
+  transform: scale(1.1);
   box-shadow: var(--glow-blue);
 }
 
 .arrowBtn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
   transform: none !important;
   box-shadow: none !important;
@@ -361,18 +382,18 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: rgba(14, 165, 233, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s var(--ease-expo);
 }
 
 .dotActive {
-  background: var(--accent-dark);
-  width: 26px;
+  background: var(--accent);
+  width: 28px;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
 }
 
 /* ─── Foot Note ─── */
@@ -381,15 +402,17 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: #ffffff; /* White footnote background */
-  border: 1px solid rgba(34, 197, 94, 0.18);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border-green);
   border-radius: 16px;
   padding: 20px 32px;
   font-size: 0.95rem;
   font-style: italic;
-  color: #475569;
+  color: var(--text-muted);
   text-align: center;
-  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.05);
+  box-shadow: 0 4px 16px rgba(34,197,94,0.07);
   max-width: fit-content;
   margin: 0 auto;
 }
@@ -400,15 +423,11 @@
 
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
-  .wrap {
-    padding: 0 20px;
-  }
+  .wrap { padding: 0 20px; }
   .footNote {
     flex-direction: column;
     gap: 6px;
     padding: 16px 20px;
   }
-  .carouselTrack {
-    gap: 16px;
-  }
+  .carouselTrack { gap: 16px; }
 }

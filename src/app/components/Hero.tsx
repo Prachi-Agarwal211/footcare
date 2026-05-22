@@ -61,6 +61,7 @@ export default function Hero() {
           preload="auto"
           poster="/hero-fallback.jpg"
           className={styles.video}
+          aria-label="High-tech prosthetic leg fitting and gait rehabilitation demonstration video"
         >
           <source src="/hero-video.webm" type="video/webm" />
           <source src="/hero-video.mp4" type="video/mp4" />

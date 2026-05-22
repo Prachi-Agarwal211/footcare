@@ -13,6 +13,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { use3DTilt } from "../hooks/use3DTilt";
+import StatsCounter from "./StatsCounter";
+import Image from "next/image";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
@@ -43,9 +45,16 @@ const RECOGNITIONS = [
 function StatCard({ num, label }: { num: string; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
   use3DTilt(ref, { max: 4, perspective: 1000 });
+  
+  // Parse target and suffix from num (e.g. "50,000+" or "1998")
+  const numericVal = parseInt(num.replace(/,/g, ""), 10);
+  const suffix = num.includes("+") ? "+" : "";
+
   return (
     <div ref={ref} className={styles.statBox}>
-      <span className={styles.statNum}>{num}</span>
+      <span className={styles.statNum}>
+        <StatsCounter target={numericVal} suffix={suffix} />
+      </span>
       <span className={styles.statLabel}>{label}</span>
     </div>
   );
@@ -122,7 +131,7 @@ export default function AboutUs() {
       <div className={styles.wrap}>
         {/* Header */}
         <div className={styles.head} ref={headRef}>
-          <span className="section-tag">About Us</span>
+          <span className="section-tag section-tag-light">About Us</span>
           <h2 className={styles.title}>
             Foot Care Jaipur<br />
             <span className={styles.titleGreen}>Artificial Limb Clinic Since 1998</span>
@@ -187,6 +196,16 @@ export default function AboutUs() {
           <div className={styles.rightCol}>
             <div className={styles.doctorCard} ref={cardRef}>
               <div className={styles.cardGlow} aria-hidden="true" />
+              <div className={styles.doctorImageContainer}>
+                <Image
+                  src="/dr-rajiv.png"
+                  alt="Portrait of Dr. Rajiv Agrawal, Clinical Director of Foot Care Jaipur"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 400px"
+                  className={styles.doctorImage}
+                  priority
+                />
+              </div>
               <div className={styles.cardBadge}>Clinical Director</div>
               <h3 className={styles.doctorName}>Dr. Rajiv Agrawal</h3>
               <p className={styles.doctorTitle}>Prosthetist &amp; Orthotist</p>

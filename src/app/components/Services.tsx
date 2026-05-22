@@ -127,6 +127,58 @@ interface CardProps {
   onToggle: () => void;
 }
 
+function getServiceIcon(id: string) {
+  switch (id) {
+    case "prosthetics":
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2v8M9 10h6M12 10v6M9 16h6M10 22h4" />
+          <circle cx="12" cy="10" r="1.5" />
+          <circle cx="12" cy="16" r="1.5" />
+        </svg>
+      );
+    case "orthotics":
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3v18M8 6h8M6 10h12M7 14h10M9 18h6" />
+        </svg>
+      );
+    case "foot-care":
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22c3.5 0 6-2.5 6-6 0-3-1.5-5-2.5-7S14.5 4 12 2C9.5 4 8.5 7 7.5 9S5 13 5 16c0 3.5 2.5 6 7 6z" />
+        </svg>
+      );
+    case "compression":
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8 3h8v3c-1.5 1-2.5 1.5-4 1.5S9.5 7 8 6V3zM8 9h8c-1.5 1-2.5 1.5-4 1.5S9.5 13 8 12V9zM8 15h8c-1.5 1-2.5 1.5-4 1.5S9.5 19 8 18v-3zM8 21h8" />
+        </svg>
+      );
+    case "diagnostics":
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 22V4c0-.5.2-1 .6-1.4C5 2.2 5.5 2 6 2h12c.5 0 1 .2 1.4.6.4.4.6.9.6 1.4v18M12 6v6M8 9h8M6 15h12" />
+          <circle cx="12" cy="18" r="1.5" />
+        </svg>
+      );
+    case "rehabilitation":
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 22h18M3 22v-4h4v-4h4v-4h4v-4h5v4M7 10l5-5 5 5" />
+        </svg>
+      );
+    default:
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="16" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+        </svg>
+      );
+  }
+}
+
 function ServiceCard({ s, active, onToggle }: CardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   use3DTilt(cardRef, { max: 8, perspective: 1000 });
@@ -148,7 +200,9 @@ function ServiceCard({ s, active, onToggle }: CardProps) {
     >
       <div className={styles.cardInner}>
         <div className={styles.cardTop}>
-          <span className={styles.cardNum}>{s.num}</span>
+          <div className={styles.cardIcon}>
+            {getServiceIcon(s.id)}
+          </div>
           <span className={styles.cardCat}>{s.category}</span>
         </div>
         <h3 className={styles.cardTitle}>{s.title}</h3>
@@ -165,13 +219,9 @@ function ServiceCard({ s, active, onToggle }: CardProps) {
           </ul>
         </div>
 
-        <button 
+        <div 
           className={styles.expandBtn} 
-          aria-label={`${active ? "Collapse" : "Expand"} ${s.title}`}
-          onClick={(e) => {
-            e.stopPropagation(); // Avoid double toggling from card click
-            onToggle();
-          }}
+          style={{ pointerEvents: "none" }}
         >
           <svg
             width="16"
@@ -188,7 +238,7 @@ function ServiceCard({ s, active, onToggle }: CardProps) {
             <polyline points="6 9 12 15 18 9" />
           </svg>
           {active ? "See less" : "See all"}
-        </button>
+        </div>
       </div>
     </div>
   );

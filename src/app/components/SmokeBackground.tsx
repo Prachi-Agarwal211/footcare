@@ -1,11 +1,3 @@
-/*
-  CHANGELOG - SmokeBackground.tsx
-  - Implemented custom WebGL FBM shader animating a fluid blue/green cloud background
-  - Added visibility listener using Page Visibility API to pause rendering loops when tab is hidden
-  - Capped pixel ratio to 1.5 to protect mobile GPUs
-  - Implemented full WebGL buffer, shader, and program cleanup on component unmount
-*/
-
 "use client";
 import React, { useEffect, useRef } from "react";
 import styles from "./SmokeBackground.module.css";
@@ -26,8 +18,9 @@ export default function SmokeBackground() {
 
     let program: WebGLProgram | null = null;
     let buffer: WebGLBuffer | null = null;
-    let animFrameId: number;
-    let isVisible = true;
+    let animFrameId: number | null = null;
+    let isVisible = true; // Tab visibility
+    let isIntersecting = false; // Viewport intersection
     let width = 0;
     let height = 0;
     const startTime = Date.now();
@@ -160,42 +153,72 @@ export default function SmokeBackground() {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Visibility Listener
-    const handleVisibilityChange = () => {
-      isVisible = document.visibilityState === "visible";
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    // Render loop
+    // Loop management functions
     const render = () => {
       if (!gl || !program) return;
-      if (isVisible) {
-        gl.clearColor(0.02, 0.03, 0.06, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.clearColor(0.02, 0.03, 0.06, 1.0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
 
-        gl.useProgram(program);
+      gl.useProgram(program);
 
-        // Bind vertices
-        gl.enableVertexAttribArray(positionLocation);
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(positionLocation);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-        // Set uniforms
-        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-        gl.uniform1f(timeLocation, (Date.now() - startTime) / 1000.0);
+      gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+      gl.uniform1f(timeLocation, (Date.now() - startTime) / 1000.0);
 
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-      }
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+
       animFrameId = requestAnimationFrame(render);
     };
 
-    animFrameId = requestAnimationFrame(render);
+    const startLoop = () => {
+      if (!animFrameId && isVisible && isIntersecting) {
+        animFrameId = requestAnimationFrame(render);
+      }
+    };
+
+    const stopLoop = () => {
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    };
+
+    // Visibility Listener
+    const handleVisibilityChange = () => {
+      isVisible = document.visibilityState === "visible";
+      if (isVisible) {
+        startLoop();
+      } else {
+        stopLoop();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Viewport Intersection Observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(canvas);
 
     // Cleanup
     return () => {
-      cancelAnimationFrame(animFrameId);
+      stopLoop();
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      observer.disconnect();
       if (gl) {
         if (buffer) gl.deleteBuffer(buffer);
         if (program) {

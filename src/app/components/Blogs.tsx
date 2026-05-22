@@ -107,6 +107,7 @@ function BlogCard({ b }: BlogCardProps) {
       target="_blank"
       rel="noopener noreferrer"
       className={`${styles.card} ${b.featured ? styles.featured : ""}`}
+      lang={b.lang === "Hindi" ? "hi" : "en"}
     >
       <div className={styles.cardInner}>
         <div className={styles.cardMeta}>

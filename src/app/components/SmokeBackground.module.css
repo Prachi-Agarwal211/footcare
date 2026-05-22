@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -10;
+  z-index: -2;
   pointer-events: none;
   background-color: #05080f;
   transform: translate3d(0, 0, 0); /* Force GPU composite layer */

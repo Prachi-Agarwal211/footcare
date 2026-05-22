@@ -1,0 +1,98 @@
+.hoursCard {
+  background: var(--light-card);
+  border: 1px solid var(--light-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.statusHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--light-border);
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.statusDotOpen {
+  background-color: var(--accent);
+}
+
+.statusDotOpen::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  animation: pulseOpen 2s infinite;
+}
+
+.statusDotClosed {
+  background-color: #ef4444;
+}
+
+@keyframes pulseOpen {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.statusTitle {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.statusTitleOpen {
+  color: var(--accent-dark);
+}
+
+.statusTitleClosed {
+  color: #ef4444;
+}
+
+.timingsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.timingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--text-slate);
+}
+
+.timingRowActive {
+  color: var(--primary-dark);
+  font-weight: 700;
+  background: rgba(14, 165, 233, 0.06);
+  padding: 4px 8px;
+  margin: 0 -8px;
+  border-radius: 6px;
+}
+
+.dayName {
+  font-weight: 600;
+}
+
+.timeText {
+  font-family: var(--font-tech);
+}

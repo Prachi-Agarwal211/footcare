@@ -94,7 +94,13 @@ export default function Footer() {
           <ul className={styles.contactList}>
             <li>
               <span className={styles.contactIcon}>📍</span>
-              <span>2, Friends Colony, Jhalana Pyau,<br />Calgary Road, Malviya Nagar,<br />Jaipur — 302017, Rajasthan</span>
+              <a
+                href="https://maps.app.goo.gl/o1u8L3Wn6wQpC2aD9"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                2, Friends Colony, Jhalana Pyau,<br />Calgary Road, Malviya Nagar,<br />Jaipur — 302017, Rajasthan
+              </a>
             </li>
             <li>
               <span className={styles.contactIcon}>📞</span>
@@ -103,6 +109,13 @@ export default function Footer() {
             <li>
               <span className={styles.contactIcon}>✉</span>
               <a href="mailto:footcarejaipur@gmail.com">footcarejaipur@gmail.com</a>
+            </li>
+            <li>
+              <span className={styles.contactIcon}>🕒</span>
+              <span>
+                Mon-Sat: 9:00 AM - 7:00 PM<br />
+                Sunday: Closed
+              </span>
             </li>
           </ul>
         </div>

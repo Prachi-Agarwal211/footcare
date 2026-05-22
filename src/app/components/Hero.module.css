@@ -304,6 +304,9 @@
   padding-top: 16px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   font-family: var(--font-tech);
   font-size: 0.62rem;
   color: var(--text-dim);

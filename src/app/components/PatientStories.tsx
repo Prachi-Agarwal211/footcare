@@ -159,16 +159,12 @@ function StoryCard({ s, expanded, onToggle, isActive, slideWidth }: StoryCardPro
             </blockquote>
           </div>
 
-          <button
+          <div
             className={styles.readMore}
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggle();
-            }}
-            aria-expanded={expanded}
+            style={{ pointerEvents: "none" }}
           >
             {expanded ? "Read Less ↑" : "Read Full Story ↓"}
-          </button>
+          </div>
         </div>
       </div>
     </motion.div>

@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./Contact.module.css";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { use3DTilt } from "../hooks/use3DTilt";
+import ClinicHours from "./ClinicHours";
+import GoogleMap from "./GoogleMap";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
@@ -72,6 +74,21 @@ export default function Contact() {
   // Hook 3D mouse tilt animation to the form card
   use3DTilt(formRef, { max: 5, perspective: 1000 });
 
+  useEffect(() => {
+    const handleAutofill = (e: Event) => {
+      const customEvent = e as CustomEvent<{ notes: string; service: string }>;
+      if (customEvent.detail) {
+        setForm((prev) => ({
+          ...prev,
+          notes: customEvent.detail.notes,
+          service: customEvent.detail.service,
+        }));
+      }
+    };
+    window.addEventListener("autofillContact", handleAutofill);
+    return () => window.removeEventListener("autofillContact", handleAutofill);
+  }, []);
+
   useGSAP(
     () => {
       gsap.fromTo(
@@ -115,13 +132,28 @@ export default function Contact() {
     >
   ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("submitting");
-    setTimeout(() => {
-      setStatus("success");
-      setForm({ name: "", phone: "", service: SERVICES_OPTS[0], notes: "" });
-    }, 1400);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setStatus("success");
+        setForm({ name: "", phone: "", service: SERVICES_OPTS[0], notes: "" });
+      } else {
+        const data = await res.json();
+        alert(data.error || "Something went wrong. Please try again.");
+        setStatus("idle");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit request. Please check your connection and try again.");
+      setStatus("idle");
+    }
   };
 
   return (
@@ -259,6 +291,12 @@ export default function Contact() {
               </svg>
               LinkedIn
             </a>
+          </div>
+
+          {/* Timings and Map Widgets */}
+          <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "24px" }}>
+            <ClinicHours />
+            <GoogleMap />
           </div>
         </div>
 
